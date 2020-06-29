@@ -128,6 +128,9 @@ func (c *Client) PostForm(path string, form map[string]io.Reader) (*ImageInfo, e
 	}
 
 	b, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
 	v := &ImageResponse{}
 	err = json.Unmarshal(b, v)
 	if err != nil {
