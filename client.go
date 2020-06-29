@@ -50,7 +50,7 @@ func (c *Client) PostForm(path string, form map[string]io.Reader) error {
 
 	var err error
 	for field, data := range form {
-		if data != nil {
+		if data == nil {
 			return errors.New(fmt.Sprint("field ", field, " doesn't contain any data"))
 		}
 		var fw io.Writer
