@@ -31,7 +31,7 @@ func (c *Client) PostImage(image *Image) error {
 	return c.PostForm("/upload", map[string]io.Reader{"image": image})
 }
 
-func (c *Client) PostImageUrl(url string) error {
+func (c *Client) PostImageUrl(name, url string) error {
 	return c.PostForm("/upload", map[string]io.Reader{"image": strings.NewReader(url)})
 }
 
