@@ -81,7 +81,7 @@ func (c *Client) PostForm(path string, form map[string]io.Reader) (*ImageInfo, e
 
 		var fw io.Writer
 
-		if rc, ok := data.(NamedReadCloser); ok {
+		if rc, ok := data.(NamedReader); ok {
 			if rc.Name() != "" {
 				if fw, err = w.CreateFormFile(field, rc.Name()); err != nil {
 					return nil, err
@@ -122,9 +122,10 @@ func (c *Client) PostForm(path string, form map[string]io.Reader) (*ImageInfo, e
 	}
 	if res.StatusCode >= 400 {
 		b, _ := ioutil.ReadAll(res.Body)
-		v := make(map[string]interface{})
-		_ = json.Unmarshal(b, &v)
-		return nil, errors.New(fmt.Sprintf("%+v\n", v))
+		defer res.Body.Close()
+		v := new(ServerError)
+		_ = json.Unmarshal(b, v)
+		return nil, v
 	}
 
 	b, err := ioutil.ReadAll(res.Body)

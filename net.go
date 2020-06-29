@@ -1,20 +1,5 @@
 package imgur_go
 
-type CommonResponse struct {
-	Success bool `json:"success"`
-	Status  int  `json:"status"`
-}
-
-type ImageResponse struct {
-	Data ImageData `json:"data"`
-	CommonResponse
-}
-
-type AlbumResponse struct {
-	Data AlbumData `json:"data"`
-	CommonResponse
-}
-
 type ImageData struct {
 	ImageInfo
 	Id         string `json:"id"`
@@ -31,4 +16,26 @@ type AlbumData struct {
 	Id          string `json:"id"`
 	Timestamp   int64  `json:"datetime"`
 	ImagesCount int    `json:"images_count"`
+}
+
+type ResponseStatus struct {
+	Success bool `json:"success"`
+	Status  int  `json:"status"`
+}
+
+type ImageResponse struct {
+	Data ImageData `json:"data"`
+	ResponseStatus
+}
+
+type AlbumResponse struct {
+	Data AlbumData `json:"data"`
+	ResponseStatus
+}
+
+type ErrorResponse struct {
+	Data struct {
+		Error interface{} `json:"error"`
+	} `json:"data"`
+	ResponseStatus
 }

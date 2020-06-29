@@ -4,7 +4,7 @@ import "io"
 
 type Image struct {
 	Info ImageInfo
-	Data *io.ReadCloser
+	Data *io.Reader
 }
 
 func (i Image) Name() string {
@@ -15,11 +15,7 @@ func (i Image) Read(p []byte) (n int, err error) {
 	return (*i.Data).Read(p)
 }
 
-func (i Image) Close() error {
-	return (*i.Data).Close()
-}
-
-type NamedReadCloser interface {
+type NamedReader interface {
 	Name() string
 	io.Reader
 	io.Closer

@@ -10,13 +10,11 @@ func TestClient_PostImageUrl(t *testing.T) {
 	info, err := client.PostImageUrl(ImageInfo{
 		Title:       "Test",
 		Description: "Test Image",
-		Url:         "https://i.picsum.photos/id/887/200/200.jpg?hmac=yOynpt597y5pLfJ5SsRVVKZiT5MXElbhtgUYeRzu3S4",
+		Url:         "https://cdn.discordapp.com/attachments/725214545307762740/727192857131352206/wp_ss_20161110_0001.png",
 	})
 
 	if err != nil {
 		t.Fatal(err)
-		return
 	}
-	t.Log("PostImageUrl succeeded")
-	t.Log(info.Url)
+	t.Log("image URL:", info.Url)
 }
