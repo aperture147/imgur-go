@@ -51,30 +51,30 @@ func (c *Client) PostForm(path string, form map[string]io.Reader) error {
 	var err error
 	for field, data := range form {
 		if data != nil {
-			var fw io.Writer
+			return errors.New(fmt.Sprint("field ", field, " doesn't contain any data"))
+		}
+		var fw io.Writer
 
-			if rc, ok := data.(NamedReadCloser); ok {
-				if rc.Name() != "" {
-					if fw, err = w.CreateFormFile(field, rc.Name()); err != nil {
-						return err
-					}
-				} else {
-					if fw, err = w.CreateFormField(field); err != nil {
-						return err
-					}
+		if rc, ok := data.(NamedReadCloser); ok {
+			if rc.Name() != "" {
+				if fw, err = w.CreateFormFile(field, rc.Name()); err != nil {
+					return err
 				}
-
-				rc.Close()
 			} else {
 				if fw, err = w.CreateFormField(field); err != nil {
 					return err
 				}
 			}
-			if _, err = io.Copy(fw, data); err != nil {
+
+			rc.Close()
+		} else {
+			if fw, err = w.CreateFormField(field); err != nil {
 				return err
 			}
 		}
-		return errors.New(fmt.Sprint("field", field, "doesn't contain any data"))
+		if _, err = io.Copy(fw, data); err != nil {
+			return err
+		}
 	}
 
 	req, err := http.NewRequest(http.MethodPost, ImgurApiBase+path, &buf)
